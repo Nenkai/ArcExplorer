@@ -30,6 +30,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
     public override string Author => "Nenkai";
     public override string? Website => "https://github.com/Nenkai/FF16Tools";
 
+    // Supported files (for display) goes here.
     public override IReadOnlyCollection<ISupportedPluginFileType>? SupportedFileTypes => 
     [
         new PluginSupportedFileType()
@@ -43,6 +44,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
     {
         base.Initialize();
 
+        // Register additional plugin settings.
         RegisterSetting(new ArchiveSettingDescriptor()
         {
             Name = "GameType",
@@ -56,6 +58,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
 
     protected override IGameArchive OpenArchiveCore(string path, ArchiveLoadParameters? parameters = null)
     {
+        // Incase you need specific archive handling that you can't otherwise determine though absent versioning
         if (!Settings.TryGetValue("GameType", out FaithGameTypeSetting? gameTypeValue))
             throw new InvalidOperationException("FaithPlugin: Game type is not specified.");
 
@@ -80,6 +83,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
 
     public override IReadOnlyDictionary<string, IAttributeMetadata<IGameArchiveFile>> GetFileAttributes()
     {
+        // Per-file specific metadata, define anything that your archive supplies here
         List<IAttributeMetadata<IGameArchiveFile>> list = [
             AttributeMetadata.Create("Name", "Name", AttributeDisplayFormat.FileName, accessor: (IGameArchiveFile file) => file.Name),
             AttributeMetadata.Create("Size", "Size", AttributeDisplayFormat.ByteSize, accessor: (IGameArchiveFile file) => file.Size),
@@ -100,11 +104,12 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
 
     public override bool IsSupported(Stream stream)
     {
-        throw new NotImplementedException();
+        // Put code to check if an archive is supported here
     }
 
     public override bool IsSupported(string path)
     {
+        // This should be left to path checks only. Use the other IsSupported for actual header checks.
         return Path.GetExtension(path).Equals(".pac", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -142,6 +147,7 @@ public class FaithGameArchive : GameArchiveBase
         PackFile = packFile;
     }
 
+    // Returns a file tree of the current archive.
     public override IFileSystemTree GetTree()
     {
         if (_tree is not null)
@@ -173,7 +179,7 @@ public class FaithGameArchive : GameArchiveBase
 
     public override Task<IFileSystemTree> GetTreeAsync(CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        // If async is needed.
     }
 
     public override void Dispose()
@@ -183,17 +189,18 @@ public class FaithGameArchive : GameArchiveBase
 
     public override IReadOnlyDictionary<string, IAttributeMetadata<IGameArchive>> GetAttributes()
     {
+        // Define attributes of your archive (stuff like encryption key, version and whatnot here)
         return new Dictionary<string, IAttributeMetadata<IGameArchive>>();
     }
 
     public override ValueTask DisposeAsync()
     {
-        throw new NotImplementedException();
+        // ...
     }
 
     public override Task ExtractFileAsync(IGameArchiveFile file, Stream outputStream, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        // Whether you need async extraction, plug it here
     }
 }
 ```
