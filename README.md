@@ -50,7 +50,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
             Name = "GameType",
             DisplayName = "Game Type",
             Description = "Game type.",
-            ValueType = typeof(FaithGameTypeSetting),
+            ValueType = typeof(FaithGameTypeSetting),        // Enums are also supported. ArcExplorer turns these into a dropdown.
             DefaultValue = null,
             IsRequired = true
         });
