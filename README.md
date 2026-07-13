@@ -125,7 +125,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
 
 ```
 
-Then, your archive handler (`FaithGameArchive.cs`:
+Then, your archive handler (`FaithGameArchive.cs`):
 
 ```cs
 using FF16Tools.Pack;
@@ -204,3 +204,7 @@ public class FaithGameArchive : GameArchiveBase
     }
 }
 ```
+
+This is all that is required to build a plugin.
+
+Just make sure to **publish** your plugin so that the dependencies are also copied, as ArcExplorer makes uses of AssemblyLoadContexts to separate plugins.
