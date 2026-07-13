@@ -1,0 +1,63 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:ArcExplorer"
+             xmlns:folderExplorerVMs="using:ArcExplorer.ViewModels.Windows.Main.FolderExplorer"
+             xmlns:controls="using:ArcExplorer.Controls"
+             xmlns:converters="using:ArcExplorer.Converters"
+             xmlns:dialogHostAvalonia="using:DialogHostAvalonia"
+             xmlns:dialogs="using:AvaloniaDialogs.Views"
+             x:Class="ArcExplorer.App"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+
+    <Application.Resources>
+         <ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary x:Key="Light">
+					<SolidColorBrush x:Key="CustomSnackbarBrush"
+									 Color="#aaa"/>
+				</ResourceDictionary>
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key="CustomSnackbarBrush"
+									 Color="#666"/>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+
+            <converters:ColorToBrushConverter x:Key="colorToBrushConverter"/>
+		    <converters:VectorIconConverter x:Key="vectorIconConverter"/>
+
+            <DataTemplate x:Key="FileNameCellTemplate" x:DataType="folderExplorerVMs:FolderExplorerRow">
+                <StackPanel Orientation="Horizontal" Margin="6,0,0,0" Spacing="4">
+                    <Image Width="14" Height="14">
+                        <Image.Source>
+                            <controls:VectorIconDrawingImage Brush="{Binding IconColor, Converter={StaticResource colorToBrushConverter}}"
+		    												 Drawing="{Binding IconKind, Converter={StaticResource vectorIconConverter}}"/>
+                        </Image.Source>
+                    </Image>
+                    <TextBlock Text="{CompiledBinding Name}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
+		</ResourceDictionary>
+    </Application.Resources>
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <SimpleTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Generic.axaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>
+
+        <!-- Icons -->
+		<StyleInclude Source="avares://ArcExplorer/Assets/Icons/Bootstrap.xaml"/>
+		<StyleInclude Source="avares://ArcExplorer/Assets/Icons/Material.xaml"/>
+
+        <dialogHostAvalonia:DialogHostStyles/>
+
+        <Style Selector="dialogs|Snackbar">
+		<Setter Property="Background"
+				Value="{DynamicResource CustomSnackbarBrush}"/>
+	    </Style>
+    </Application.Styles>
+</Application>

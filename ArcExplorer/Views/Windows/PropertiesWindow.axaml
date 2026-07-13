@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="360" d:DesignHeight="450"
+        Width="360" Height="450"
+        xmlns:VMs="using:ArcExplorer.ViewModels.Windows.Properties"
+        x:Class="ArcExplorer.Views.Windows.PropertiesWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Archive Properties"
+        WindowStartupLocation="CenterOwner"
+        CanMaximize="False"
+        x:CompileBindings="True"
+        x:DataType="VMs:PropertiesWindowViewModel">
+  <Design.DataContext>
+    <VMs:PropertiesWindowViewModel />
+  </Design.DataContext>
+    <TabControl>
+        <TabItem Header="Properties">
+			<TreeDataGrid Source="{Binding Source}" BorderThickness="0"/>
+        </TabItem>
+    </TabControl>
+</Window>

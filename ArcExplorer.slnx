@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="ArcExplorer.Browser/ArcExplorer.Browser.csproj" />
+  <Project Path="ArcExplorer.Desktop/ArcExplorer.Desktop.csproj" />
+  <Project Path="ArcExplorer/ArcExplorer.csproj" />
+  <Project Path="Avalonia.Controls.TreeDataGrid/src/Avalonia.Controls.TreeDataGrid/Avalonia.Controls.TreeDataGrid.csproj" />
+  <Project Path="NenTools/NenTools.ArchiveService/Abstractions/NenTools.ArchiveService.Abstractions.csproj" />
+  <Project Path="NenTools/NenTools.ArchiveService/Implementations/NenTools.ArchiveService.Implementations.csproj" />
+</Solution>

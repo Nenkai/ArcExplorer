@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ArcExplorer.Desktop": {
+      "commandName": "Project",
+      "commandLineArgs": "bake -i \"D:\\Games\\SteamLibrary\\steamapps\\common\\WWE 2K26\\Characters\" -v 9.9"
+    }
+  }
+}

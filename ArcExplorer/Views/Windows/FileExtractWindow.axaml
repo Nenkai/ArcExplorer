@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="150"
+        Width="400" Height="150"
+        xmlns:VMs="using:ArcExplorer.ViewModels.Windows.FileExtract"
+        x:Class="ArcExplorer.Views.Windows.FileExtractWindow"
+        x:DataType="VMs:FileExtractWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Extracting..."
+        FontFamily="$Default"
+        WindowStartupLocation="CenterOwner"
+        CanMaximize="False"
+        CanResize="False" x:CompileBindings="True">
+  <Window.DataContext>
+	  <VMs:FileExtractWindowViewModel/>
+  </Window.DataContext>
+  <Design.DataContext>
+    <VMs:FileExtractWindowViewModel />
+  </Design.DataContext>
+  <Border BorderThickness="0,4,0,0" BorderBrush="{DynamicResource HighlightBrush2}">
+    <Grid RowDefinitions="55*,15*,35*">
+        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
+	          <TextBlock HorizontalAlignment="Center">
+              <TextBlock.Text>
+                  <MultiBinding StringFormat="{}Extracting file {0:0} of {1:0}">
+                      <Binding Path="ProgressValue"/>
+                      <Binding Path="ProgressMaximum"/>
+                  </MultiBinding>
+              </TextBlock.Text>
+            </TextBlock>
+            <DockPanel Margin="16,0,16,0">
+	    		  <TextBlock Text="{Binding CurrentFile}" FontWeight="Bold" DockPanel.Dock="Left" TextTrimming="CharacterEllipsis"/>
+                <TextBlock Text="{Binding FileSize}" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+            </DockPanel>
+        </StackPanel>
+        <ProgressBar Grid.Row="1" ShowProgressText="True" VerticalAlignment="Top" Height="16" Value="{Binding ProgressValue}" Minimum="{Binding ProgressMinimum}" Maximum="{Binding ProgressMaximum}" Margin="16,0,16,0"/>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="8" Margin="8,8,16,8">
+	    	  <Button Content="Cancel" Command="{Binding CancelCommand}" CornerRadius="4"/>
+        </StackPanel>
+    </Grid>
+  </Border>
+</Window>

@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:menu="using:ArcExplorer.ViewModels.Menu"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:controls="using:ArcExplorer.Controls"
+			 xmlns:converters="using:ArcExplorer.Converters"
+             xmlns:vm="using:ArcExplorer.ViewModels"
+             x:DataType="vm:TopMenuViewModel" x:Class="ArcExplorer.Views.TopMenuView"
+			 x:CompileBindings="True">
+  <Design.DataContext>
+	<vm:TopMenuViewModel />
+  </Design.DataContext>
+
+  <UserControl.Resources>
+		<converters:VectorIconConverter x:Key="vectorIconConverter"/>
+	</UserControl.Resources>
+
+  <UserControl.Styles>
+	<Style Selector="MenuItem" x:DataType="menu:MenuItemViewModel" >
+		<Setter Property="Header" Value="{Binding Header}" />
+		<Setter Property="Command" Value="{Binding Command}" />
+		<Setter Property="CommandParameter" Value="{Binding Parameter}"/>
+		<Setter Property="IsEnabled" Value="{Binding Enabled}" />
+		<Setter Property="IsChecked" Value="{Binding Checked}" />
+		<Setter Property="ToggleType" Value="{Binding ToggleType}" />
+		<Setter Property="ItemsSource" Value="{Binding MenuItems}"/>
+		<Setter Property="IsSubMenuOpen" Value="{Binding IsSubMenuOpen}"/>
+		<Setter Property="StaysOpenOnClick" Value="{Binding StaysOpenOnClick}"/>
+		<Setter Property="InputGesture" Value="{Binding HotKey}"/>
+		<Setter Property="HotKey" Value="{Binding HotKey}"/>
+	</Style>
+
+	<!-- Ensure to only apply an icon when there is no specific toggle type, otherwise there will be a gap. -->
+	<Style Selector="MenuItem[ToggleType=None]">
+		<Setter Property="Icon">
+			<Template>
+				<Image x:DataType="menu:MenuItemViewModel">
+					<Image.Source>
+						<controls:VectorIconDrawingImage Drawing="{Binding IconKind, Converter={StaticResource vectorIconConverter}}"/>
+					</Image.Source>
+				</Image>
+			</Template>
+		</Setter>
+	</Style>
+</UserControl.Styles>
+
+<Menu ItemsSource="{Binding MenuItems}">
+	<Menu.Styles>
+        <Style Selector="Menu > MenuItem">
+            <Setter Property="Padding" Value="8,4"/>
+			<Setter Property="CornerRadius" Value="4"/>
+        </Style>
+    </Menu.Styles>
+</Menu>
+</UserControl>

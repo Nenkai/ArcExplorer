@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:gui="using:ArcExplorer"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:VMs="using:ArcExplorer.ViewModels.Windows.Main"
+             xmlns:views="using:ArcExplorer.Views"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+             x:Class="ArcExplorer.Views.MainView"
+             x:DataType="VMs:MainViewModel" x:CompileBindings="True"
+			 DragDrop.AllowDrop="True"
+			 Loaded="UserControl_Loaded">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <VMs:MainViewModel />
+  </Design.DataContext>
+
+  <DockPanel>
+		<views:TopMenuView DockPanel.Dock="Top" DataContext="{Binding TopMenu}"/>
+		<views:StatusBarView DockPanel.Dock="Bottom" Height="24" DataContext="{Binding StatusBar}" />
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" MinWidth="100" MaxWidth="500" />
+                <ColumnDefinition Width="2" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <views:FileSystemTreeExplorerView Grid.Column="0" DataContext="{Binding FileSystemTreeExplorer}" />
+            <GridSplitter Grid.Column="1" Background="Gray" />
+            <gui:FolderExplorerView Grid.Column="2" DataContext="{Binding FolderExplorer}"/>
+        </Grid>
+	</DockPanel>
+</UserControl>

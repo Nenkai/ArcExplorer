@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:converters="using:ArcExplorer.Converters"
+			 xmlns:controls="using:ArcExplorer.Controls"
+             xmlns:VMs="using:ArcExplorer.ViewModels.Windows.Main"
+			 xmlns:tvms="using:ArcExplorer.ViewModels.TreeView"
+			 xmlns:menuVMs="using:ArcExplorer.ViewModels.Menu"
+             x:Class="ArcExplorer.Views.FileSystemTreeExplorerView"
+			 x:DataType="VMs:FileSystemTreeExplorerViewModel"
+			 x:CompileBindings="True">
+  <Design.DataContext>
+        <VMs:FileSystemTreeExplorerViewModel/>
+  </Design.DataContext>
+
+	<UserControl.Resources>
+		<converters:ColorToBrushConverter x:Key="colorToBrushConverter"/>
+		<converters:VectorIconConverter x:Key="vectorIconConverter"/>
+	</UserControl.Resources>
+	
+	<UserControl.Styles>
+		<Style Selector="MenuItem" x:DataType="menuVMs:MenuItemViewModel">
+			<Setter Property="Header" Value="{Binding Header}" />
+			<Setter Property="Command" Value="{Binding Command}" />
+			<Setter Property="CommandParameter" Value="{Binding Parameter}"/>
+			<Setter Property="IsEnabled" Value="{Binding Enabled}" />
+			<Setter Property="IsChecked" Value="{Binding Checked}" />
+			<Setter Property="ToggleType" Value="{Binding ToggleType}" />
+			<Setter Property="ItemsSource" Value="{Binding MenuItems}"/>
+			<Setter Property="IsSubMenuOpen" Value="{Binding IsSubMenuOpen}"/>
+			<Setter Property="StaysOpenOnClick" Value="{Binding StaysOpenOnClick}"/>
+			<Setter Property="InputGesture" Value="{Binding HotKey}"/>
+			<Setter Property="HotKey" Value="{Binding HotKey}"/>
+		</Style>
+
+		<!-- Ensure to only apply an icon when there is no specific toggle type, otherwise there will be a gap. -->
+		<Style Selector="MenuItem[ToggleType=None]">
+			<Setter Property="Icon">
+				<Template>
+					<Image x:DataType="menuVMs:MenuItemViewModel">
+						<Image.Source>
+							<controls:VectorIconDrawingImage Drawing="{Binding IconKind, Converter={StaticResource vectorIconConverter}}"/>
+						</Image.Source>
+					</Image>
+				</Template>
+			</Setter>
+		</Style>
+	</UserControl.Styles>
+
+    <Grid>
+		<TreeView Name="treeView" ItemsSource="{Binding DisplayedItems}" SelectedItem="{Binding SelectedItem}" >
+			<TreeView.ItemTemplate>
+				<TreeDataTemplate ItemsSource="{Binding DisplayedItems}" x:DataType="tvms:TreeViewItemViewModel">
+					<StackPanel Orientation="Horizontal" IsVisible="{Binding Visible}" Background="Transparent" 
+								PointerPressed="StackPanel_PointerPressed" PointerMoved="StackPanel_PointerMoved" PointerReleased="StackPanel_PointerReleased">
+						<StackPanel.ContextMenu>
+							<ContextMenu ItemsSource="{Binding ContextActions}" FontFamily="$Default" />
+						</StackPanel.ContextMenu>
+						<Image Width="14" Height="14">
+							<Image.Source>
+								<controls:VectorIconDrawingImage Brush="{Binding IconColor, Converter={StaticResource colorToBrushConverter}}"
+																 Drawing="{Binding IconKind, Converter={StaticResource vectorIconConverter}}"/>
+							</Image.Source>
+						</Image>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Padding="4,0,0,0" Text="{Binding TreeViewName}"/>
+							<TextBlock Text="{Binding Caption, StringFormat='• {0}'}" Foreground="DimGray" Margin="4,0,0,0" IsVisible="{Binding Caption, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+						</StackPanel>
+					</StackPanel>
+				</TreeDataTemplate>
+			</TreeView.ItemTemplate>
+			<TreeView.Resources>
+				<SolidColorBrush Color="Transparent" x:Key="ThemeControlHighlightMidBrush"/>
+			</TreeView.Resources>
+			<TreeView.Styles>
+				<Style Selector="TreeViewItem" x:DataType="tvms:TreeViewItemViewModel">
+					<Setter Property="MinHeight" Value="18" />
+					<Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+				</Style>
+			</TreeView.Styles>
+		</TreeView>
+    </Grid>
+</UserControl>

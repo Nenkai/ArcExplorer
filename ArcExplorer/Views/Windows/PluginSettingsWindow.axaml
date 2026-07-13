@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+        Width="400" Height="300"
+        x:Class="ArcExplorer.Views.Windows.PluginSettingsWindow"
+        xmlns:VMs="using:ArcExplorer.ViewModels.Windows.PluginSettings"
+        xmlns:Templates="using:ArcExplorer.Templates"
+        Title="Plugin Settings"
+        Icon="/Assets/avalonia-logo.ico"
+        FontFamily="$Default"
+        WindowStartupLocation="CenterOwner"
+        x:DataType="VMs:PluginSettingsDialogViewModel">
+<Design.DataContext>
+    <VMs:PluginSettingsDialogViewModel />
+</Design.DataContext>
+
+<DockPanel>
+    <StackPanel DockPanel.Dock="Bottom">
+        <Button VerticalAlignment="Bottom" Content="OK" Click="Button_Click" Margin="8,8,16,8" Width="80" HorizontalAlignment="Right"/>
+    </StackPanel>
+    <TextBlock IsVisible="{Binding RequiredOnly}" DockPanel.Dock="Top" Margin="4,4,4,4">
+		This archive requires specific plugin settings to open.
+        <LineBreak/>
+        Provide them below.
+    </TextBlock>
+
+    <Border BorderThickness="1" DockPanel.Dock="Top">
+        <DataGrid ItemsSource="{Binding Settings}" BorderThickness="1" BorderBrush="Black" HeadersVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="160" IsReadOnly="True" Binding="{Binding Descriptor.DisplayName}"/>
+                <DataGridTemplateColumn Header="Value" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding}">
+                                <ContentControl.DataTemplates>
+                                    <Templates:SettingDataTemplateSelector/>
+                                </ContentControl.DataTemplates>
+                            </ContentControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Border>
+
+</DockPanel>
+</Window>

@@ -1,0 +1,132 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:controls="using:ArcExplorer.Controls"
+             xmlns:converters="using:ArcExplorer.Converters"
+             xmlns:VMs="using:ArcExplorer.ViewModels.Windows.Main.FolderExplorer"
+             xmlns:menuVMs="using:ArcExplorer.ViewModels.Menu"
+             x:Class="ArcExplorer.FolderExplorerView"
+             x:DataType="VMs:FolderExplorerViewModel"
+             Name="FolderExplorer"
+             x:CompileBindings="True">
+    <Design.DataContext>
+        <VMs:FolderExplorerViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Resources>
+		<converters:ColorToBrushConverter x:Key="colorToBrushConverter"/>
+		<converters:VectorIconConverter x:Key="vectorIconConverter"/>
+	</UserControl.Resources>
+
+    <UserControl.Styles>
+		<Style Selector="MenuItem" x:DataType="menuVMs:MenuItemViewModel">
+			<Setter Property="Header" Value="{Binding Header}" />
+			<Setter Property="Command" Value="{Binding Command}" />
+			<Setter Property="CommandParameter" Value="{Binding Parameter}"/>
+			<Setter Property="IsEnabled" Value="{Binding Enabled}" />
+			<Setter Property="IsChecked" Value="{Binding Checked}" />
+			<Setter Property="ToggleType" Value="{Binding ToggleType}" />
+			<Setter Property="ItemsSource" Value="{Binding MenuItems}"/>
+			<Setter Property="IsSubMenuOpen" Value="{Binding IsSubMenuOpen}"/>
+			<Setter Property="StaysOpenOnClick" Value="{Binding StaysOpenOnClick}"/>
+			<Setter Property="InputGesture" Value="{Binding HotKey}"/>
+			<Setter Property="HotKey" Value="{Binding HotKey}"/>
+		</Style>
+
+        <!-- Ensure to only apply an icon when there is no specific toggle type, otherwise there will be a gap. -->
+	    <Style Selector="MenuItem[ToggleType=None]">
+	    	<Setter Property="Icon">
+	    		<Template>
+	    			<Image x:DataType="menuVMs:MenuItemViewModel">
+	    				<Image.Source>
+	    					<controls:VectorIconDrawingImage Drawing="{Binding IconKind, Converter={StaticResource vectorIconConverter}}"/>
+	    				</Image.Source>
+	    			</Image>
+	    		</Template>
+	    	</Setter>
+	    </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" BorderThickness="1" Height="34">
+            <Grid ColumnDefinitions="*, Auto">
+
+                <!-- Current Archive + Folder -->
+                <Border Grid.Column="0" VerticalAlignment="Center" CornerRadius="3" BorderBrush="{DynamicResource ThemeBorderHighColor}" BorderThickness="0"
+                        Background="{DynamicResource ThemeControlMidBrush}" Margin="4,0,4,0">
+	    			<Grid ColumnDefinitions="Auto,Auto,*" Margin="4,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="14" IsHitTestVisible="False" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <controls:VectorIconDrawingImage Drawing="{StaticResource Bootstrap.PcDisplayHorizontal}" Brush="#C0C0C0"/>
+                                </Image.Source>
+                            </Image>
+							<ComboBox PlaceholderText="No Source" ItemsSource="{Binding ArchiveList}" PlaceholderForeground="#C0C0C0" 
+                                      Background="{DynamicResource ThemeControlMidBrush}" BorderThickness="0"
+                                      IsEnabled="{Binding !!ArchiveList.Count}"
+                                      SelectedItem="{Binding SelectedArchive}">
+                                <ComboBox.ItemTemplate>
+									<DataTemplate x:DataType="VMs:FolderExplorerArchiveViewModel">
+                                        <TextBlock Text="{Binding Archive.Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <Border Grid.Column="1" Background="{DynamicResource ThemeControlMidBrush}" BorderThickness="1,0,0,0" BorderBrush="DarkGray" Margin="4,6"/>
+                        <TextBox Grid.Column="2"  Background="{DynamicResource ThemeControlMidBrush}" Text="{Binding Path}" VerticalAlignment="Center" PlaceholderText="..." BorderThickness="0" KeyDown="TextBox_KeyDown"/>
+                    </Grid>
+                </Border>
+
+                <!-- Search Bar -->
+                <Border Grid.Column="1" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" CornerRadius="3" BorderThickness="0"
+                        BorderBrush="{DynamicResource ThemeBorderHighColor}" Background="{DynamicResource ThemeControlMidBrush}" Margin="4,0,4,0">
+	    			<TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search" Margin="4,0,4,0"
+                             Background="{DynamicResource ThemeControlMidBrush}" BorderThickness="0">
+                        <TextBox.InnerLeftContent>
+                            <Image Width="14" IsHitTestVisible="False" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <controls:VectorIconDrawingImage Drawing="{StaticResource Bootstrap.Search}" Brush="#C0C0C0"/>
+                                </Image.Source>
+                            </Image>
+                        </TextBox.InnerLeftContent>
+                        <TextBox.InnerRightContent>
+	    					<Button Width="20" Height="16" IsVisible="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" BorderThickness="0" 
+                                    Command="{Binding ClearSearchQueryCommand}" Cursor="Arrow">
+                                <Image Width="12" Height="12">
+                                    <Image.Source>
+                                        <controls:VectorIconDrawingImage Drawing="{StaticResource Bootstrap.X}" Brush="#C0C0C0"/>
+                                    </Image.Source>
+                                </Image>
+                            </Button>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <TreeDataGrid x:Name="FolderExplorerGrid" Grid.Row="1"
+                      Source="{Binding Source}"
+                      HorizontalAlignment="Stretch">
+            <!--
+            <i:Interaction.Behaviors>
+                <EventTriggerBehavior EventName="DoubleTapped">
+                    <InvokeCommandAction Command="{Binding DoubleTappedCommand}" PassEventArgsToCommand="True"/>
+                </EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+            -->
+            <TreeDataGrid.Styles>
+                <Style Selector="TreeDataGridRow" x:DataType="VMs:FolderExplorerRow">
+                    <Setter Property="MaxHeight" Value="22" />
+                    <Setter Property="ContextMenu">
+	    				<ContextMenu ItemsSource="{Binding ContextActions}" Opening="ContextMenu_Opening" FontFamily="$Default"/>
+                    </Setter>
+                </Style>
+            </TreeDataGrid.Styles>
+        </TreeDataGrid>
+
+    </Grid>
+</UserControl>

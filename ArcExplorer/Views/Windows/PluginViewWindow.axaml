@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="320"
+        Width="900" Height="320"
+        x:Class="ArcExplorer.Views.Windows.PluginViewWindow"
+        xmlns:VMs="using:ArcExplorer.ViewModels.Windows.Plugin"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Installed Plugins"
+        FontFamily="$Default"
+        WindowStartupLocation="CenterOwner"
+        CanMaximize="False"
+        x:CompileBindings="True"
+        x:DataType="VMs:PluginViewWindowViewModel">
+  <Design.DataContext>
+    <VMs:PluginViewWindowViewModel />
+  </Design.DataContext>
+  <GroupBox Header="Plugins" Margin="4,4,4,4">
+    <TreeDataGrid Source="{Binding Source}" BorderThickness="0"/>
+  </GroupBox>
+</Window>
