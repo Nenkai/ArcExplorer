@@ -7,7 +7,7 @@ Mainly because I was getting tired of not having UIs for my archive extractors.
 <img width="1542" height="746" alt="ArcExplorer Desktop_OTA5vkVOcY" src="https://github.com/user-attachments/assets/6548e8f5-1dc8-4302-b39a-2d6460ec9440" />
 
 
-## Example Plugin (FF16)
+## Example Plugin (`FaithGameArchivePlugin.cs`)
 
 First, define your plugin.
 
@@ -125,7 +125,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
 
 ```
 
-Then, your archive handler:
+Then, your archive handler (`FaithGameArchive.cs`:
 
 ```cs
 using FF16Tools.Pack;
