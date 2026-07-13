@@ -45,7 +45,7 @@ public class FaithGameArchivePlugin : GameArchivePluginBase
         base.Initialize();
 
         // You also have access to a ILogger (Microsoft.Extensions.Logging) here.
-        Logger.LogInformation("FaithGameArchivePlugin: Initializing...);
+        Logger.LogInformation("FaithGameArchivePlugin: Initializing...");
 
         // Register additional plugin settings.
         RegisterSetting(new ArchiveSettingDescriptor()
