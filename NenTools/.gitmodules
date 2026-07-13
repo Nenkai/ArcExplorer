@@ -1,3 +1,0 @@
-[submodule "ZStd"]
-	path = ZStd
-	url = https://github.com/Nenkai/ZStd.git
