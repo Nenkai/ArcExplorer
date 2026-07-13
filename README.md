@@ -1,5 +1,8 @@
 # ArcExplorer
 
+> [!WARNING]
+> This is a work in progress, and the ArchiveService API/Interface is not finalized.
+
 A generic game archive explorer using Avalonia. Intended to be modular and expandable through plugins.
 
 Mainly because I was getting tired of not having UIs for my archive extractors.
